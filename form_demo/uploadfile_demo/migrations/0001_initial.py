@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100)),
                 ('content', models.TextField()),
-                ('thumbnial', models.FileField(upload_to='files')),
+                ('thumbnial', models.FileField(upload_to='media')),
             ],
             options={
                 'db_table': 't_article',

@@ -2,9 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>ModelFormDemo</title>
 </head>
 <body>
-
+<form action="/modelform/add_book/" method="post">
+    <table>
+        <tr>
+            <td>title: </td>
+            <td><input type="text" name="title"></td>
+        </tr>
+        <tr>
+            <td>page: </td>
+            <td><input type="text" name="page"></td>
+        </tr>
+        <tr>
+            <td>price: </td>
+            <td><input type="text" name="price"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="提交"></td>
+        </tr>
+    </table>
+</form>
 </body>
 </html>

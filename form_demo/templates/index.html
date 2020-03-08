@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>1. 通过django渲染的表单形式</p>
+<form action="" method="post">
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td><input type="submit" value="提交"></td>
+        </tr>
+    </table>
+</form>
+
+<p>2.html自带的表单形式</p>
+<form action="{% url 'index1' %}" method="post">
+    <input type="text" name="email">
+{#    <input type="text", name="price">#}
+    <input type="text", name="phone">
+    <input type="submit", value="提交">
+</form>
+</body>
+</html>

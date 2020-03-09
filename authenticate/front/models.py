@@ -15,3 +15,17 @@ class Person(User):
         return cls.objects.filter(is_active=False)
 
 
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+class UserExtension(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='extension')
+    telephone = models.CharField(max_length=11)
+    school = models.CharField(max_length=100)
+
+
+@receiver(post_save, sender=User)
+def handler_user_extension(sender, instance, created, **kwargs):
+    if created:
+        UserExtension.objects.create(user=instance)
+    else:
+        instance.extension.save()

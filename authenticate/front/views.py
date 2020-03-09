@@ -35,3 +35,22 @@ def proxy_view(request):
         print(person.username)
     return HttpResponse('proxy')
 
+
+def one_veiw(request):
+    telephone = '18888888888'
+    user = my_authenticate(telephone, password='111111')
+    print(user.username)
+    # user = User.objects.create_user(username='px2', email='123@qq.com', password='111111')
+    return HttpResponse("一对一扩展模型")
+
+
+def my_authenticate(telephone, password):
+    user = User.objects.filter(extension__telephone=telephone).first()
+    if user:
+        is_correct = user.check_password(password)
+        if is_correct:
+            return user
+        else:
+            return None
+    else:
+        return None

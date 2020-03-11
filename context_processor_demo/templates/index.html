@@ -1,4 +1,6 @@
 {% extends 'base.html'  %}
 {% block body %}
-首页
+    <p>debug:{{ debug }}</p>
+    <p>sqlqueries: {{ sql_queries }}</p>
+    <p>path: {{ request.path }}</p>
 {% endblock %}

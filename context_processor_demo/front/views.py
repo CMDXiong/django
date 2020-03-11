@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from .forms import SignupForm, SigninForm
 from .models import User
+from django.contrib import messages
 
 
 def index(request):
@@ -16,6 +17,7 @@ def index(request):
     #     pass
 
     # return render(request, 'index.html', context=context)
+    users = User.objects.all()
     return render(request, 'index.html')
 
 
@@ -34,7 +36,9 @@ class SigninView(View):
                 request.session['user_id'] = user.id
                 return redirect(reverse('index'))
             else:
-                print('用户名或者密码错误')
+                # 以下两种都可以
+                # messages.add_message(request, messages.INFO, '用户名或者密码错误')
+                messages.info(request, '用户名或者密码错误')
                 return redirect(reverse('signin'))
         else:
             print(form.errors.get_json_data())

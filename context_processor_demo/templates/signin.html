@@ -2,6 +2,7 @@
 
 {% block body %}
     <form action="" method="post">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
     <table>
         <tbody>
         <tr>
@@ -16,6 +17,17 @@
             <td></td>
             <td><input type="submit" value="提交"></td>
         </tr>
+        <tr>
+            <td></td>
+            <td>
+                <ul>
+                    {% for message in messages %}
+                        <li style="color:red;">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        
         </tbody>
     </table>
     </form>

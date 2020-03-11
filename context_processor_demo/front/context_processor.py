@@ -4,9 +4,9 @@ from .models import User
 
 
 def front_user(request):
-    user_id = request.session['user_id']
     context = {}
     try:
+        user_id = request.session['user_id']
         user = User.objects.get(pk=user_id)
         context['front_user'] = user
     except:

@@ -20,4 +20,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('inherit/', views.inherit_view),
     path('auth/', views.authen),
+    path('login/', views.my_login, name='login'),
+    path('logout/', views.my_logout, name='logout'),
+    path('profile/', views.profile, name='profile'),
+    path('create_permission/', views.create_permission, name='create_permission'),
+    path('operation_permission/', views.operation_permission, name='operation_permission'),
+    path('article/', views.add_article, name='article'),
+    path('group/', views.operator_group, name='group'),
 ]

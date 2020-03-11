@@ -48,3 +48,9 @@ class Article(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
+    class Meta:
+        permissions = [
+            ('view_article', '看文件的权限'),
+        ]
+

@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import MyUser
 from django.contrib.auth import authenticate
 
+
 def inherit_view(request):
     telephone = '17788889999'
     password = '111111'

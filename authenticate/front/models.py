@@ -29,3 +29,4 @@ def handler_user_extension(sender, instance, created, **kwargs):
         UserExtension.objects.create(user=instance)
     else:
         instance.extension.save()
+

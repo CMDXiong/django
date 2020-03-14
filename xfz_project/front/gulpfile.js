@@ -6,6 +6,8 @@ var uglify = require("gulp-uglify");
 var concat = require("gulp-concat");
 var sass = require("gulp-sass");
 var bs = require("browser-sync").create();
+var util = require("gulp-util");
+var sourcemaps = require("gulp-sourcemaps");
 // var imagemin = require("gulp-imagemin");
 // var cache = require("gulp-cache");
 
@@ -48,8 +50,10 @@ gulp.task("css", function(){
 // 定义一个js任务
 gulp.task("js", function(){
 	gulp.src(path.js + '*.js')
-        .pipe(uglify())
+		.pipe(sourcemaps.init())
+        .pipe(uglify().on('error', util.log))
 	    .pipe(rename({"suffix":".min"}))
+		.pipe(sourcemaps.write())
 	    .pipe(gulp.dest(path.js_dist))
 	    .pipe(bs.stream())
 });

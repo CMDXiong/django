@@ -1,16 +1,39 @@
 
 
 function Banner() {
+    this.bannerWidth = 798;
     this.bannerGroup = $("#banner-group");
-    this.index = 0;
+    this.index = 1;
     this.leftArrow = $(".left-arrow");
     this.rightArrow = $(".right-arrow");
     this.bannerUI = $("#banner-ul");
     this.liList = this.bannerUI.children('li');
     this.bannercount = this.liList.length;
-    this.listenBannerHover();
-
+    this.pageControl = $(".page-control");
 }
+
+Banner.prototype.initBanner = function(){
+    var self = this;
+    var firstBanner = self.liList.eq(0).clone();
+    var lastBanner = self.liList.eq(self.bannercount-1).clone();
+    self.bannerUI.prepend(lastBanner);
+    self.bannerUI.append(firstBanner);
+
+    self.bannerUI.css({'width':(self.bannercount+2)*self.bannerWidth, 'left': -self.bannerWidth});
+};
+
+Banner.prototype.initPageControl = function(){
+    var self = this;
+    for(var i=0; i<self.bannercount; i++) {
+        var circle = $("<li></li>");
+        self.pageControl.append(circle);
+        if(i === 0){
+            circle.addClass('active');
+        }
+    }
+
+    self.pageControl.css({'width': self.bannercount*(16+10)})
+};
 
 Banner.prototype.listenBannerHover = function(){
     var self = this;
@@ -38,7 +61,18 @@ Banner.prototype.toggerArrow = function(isShow){
 };
 
 Banner.prototype.animate = function(){
-    this.bannerUI.animate({"left":-798*this.index}, 500);
+    var self = this;
+    self.bannerUI.animate({"left":-798*self.index}, 500);
+    var index = self.index;
+    if(index === 0){
+        index = self.bannercount-1;
+    }else if (index === self.bannercount+1){
+        index = 0;
+    }else{
+        index = self.index - 1;
+    }
+
+    self.pageControl.children().eq(index).addClass('active').siblings().removeClass('active');
 
 };
 
@@ -46,8 +80,9 @@ Banner.prototype.loop = function(){
     var self = this;
     var bannerUI = $("#banner-ul");
     this.timer = setInterval(function () {
-        if(self.index >=3){
-            self.index = 0;
+        if(self.index >= self.bannercount+1){
+            self.bannerUI.css({'left': -self.bannerWidth});
+            self.index = 2;
         }else {
             self.index++;
         }
@@ -61,6 +96,7 @@ Banner.prototype.listenArrowClick = function(){
     var self = this;
     self.leftArrow.click(function () {
         if (self.index === 0){
+            self.bannerUI.css({'left':-self.bannerWidth*self.bannercount});
             self.index = self.bannercount-1;
         }else{
             self.index--;
@@ -69,8 +105,9 @@ Banner.prototype.listenArrowClick = function(){
         self.animate();
     });
     self.rightArrow.click(function () {
-        if (self.index === self.bannercount-1 ){
-            self.index = 0;
+        if (self.index === self.bannercount+1 ){
+            self.bannerUI.css({'left':-self.bannerWidth});
+            self.index = 2;
         }else{
             self.index++;
         }
@@ -79,11 +116,29 @@ Banner.prototype.listenArrowClick = function(){
     });
 };
 
+Banner.prototype.listenPageControl = function(){
+    var self = this;
+    self.pageControl.children('li').each(function (index, obj) {
+        $(obj).click(function () {
+            self.index = index;
+            self.animate();
+
+        });
+    })
+};
+
+
 
 Banner.prototype.run = function () {
+
     console.log('running...');
+    this.initBanner();
+    this.initPageControl();
+
     this.loop();
+    this.listenBannerHover();
     this.listenArrowClick();
+    this.listenPageControl();
 
 };
 

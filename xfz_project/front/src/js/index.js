@@ -18,7 +18,6 @@ Banner.prototype.initBanner = function(){
     var lastBanner = self.liList.eq(self.bannercount-1).clone();
     self.bannerUI.prepend(lastBanner);
     self.bannerUI.append(firstBanner);
-
     self.bannerUI.css({'width':(self.bannercount+2)*self.bannerWidth, 'left': -self.bannerWidth});
 };
 
@@ -32,7 +31,8 @@ Banner.prototype.initPageControl = function(){
         }
     }
 
-    self.pageControl.css({'width': self.bannercount*(16+10)})
+    // self.pageControl.css({'width': self.bannercount*(16+10)})
+    self.pageControl.css({'width': self.bannercount*12+8*2+16*(self.bannercount-1)})
 };
 
 Banner.prototype.listenBannerHover = function(){
@@ -62,7 +62,7 @@ Banner.prototype.toggerArrow = function(isShow){
 
 Banner.prototype.animate = function(){
     var self = this;
-    self.bannerUI.animate({"left":-798*self.index}, 500);
+    self.bannerUI.stop().animate({"left":-798*self.index}, 500);
     var index = self.index;
     if(index === 0){
         index = self.bannercount-1;
@@ -120,7 +120,7 @@ Banner.prototype.listenPageControl = function(){
     var self = this;
     self.pageControl.children('li').each(function (index, obj) {
         $(obj).click(function () {
-            self.index = index;
+            self.index = index+1;  // 与源代码不一致
             self.animate();
 
         });

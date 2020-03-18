@@ -1,8 +1,8 @@
-@import "header.scss";
-@import "body.scss";
-@import "footer.scss";
+@import "../comment/header";
+@import "../comment/body";
+@import "../comment/footer";
 
-@import "constants.scss";
+@import "../comment/constants";
 
 
 .main{

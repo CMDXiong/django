@@ -58,6 +58,7 @@ Auth.prototype.run = function () {
     self.listenShowHideEvent();
     self.listenSwitchEvent();
     self.listenSigninEvent();
+    self.listenImgCaptchaEvent();
 };
 
 Auth.prototype.showEvent = function(){
@@ -105,6 +106,14 @@ Auth.prototype.listenSwitchEvent = function(){
    });
 };
 
+Auth.prototype.listenImgCaptchaEvent = function(){
+    var self = this;
+    var imgCaptcha = $('.img-captcha');
+    imgCaptcha.click(function () {
+        imgCaptcha.attr("src", "/account/img_captcha/"+"?random="+Math.random());
+    });
+};
+
 Auth.prototype.listenSigninEvent = function(){
     var self = this;
     var signinGroup = $(".signin-group");
@@ -148,7 +157,6 @@ Auth.prototype.listenSigninEvent = function(){
         });
     });
 };
-
 
 $(function () {
     var auth  = new Auth();

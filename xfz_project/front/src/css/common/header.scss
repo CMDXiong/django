@@ -14,7 +14,6 @@
         width: $pageWidth;
         height: 100%;
         margin: 0 auto;
-        overflow: hidden;
 
         .logo-box{
             width: 140px;
@@ -55,7 +54,7 @@
             line-height: 64px;
             height: 64px;
             color: #fff;
-            //position: relative;
+            position: relative;
 
             .iconfont {
                 color: #fff;
@@ -66,19 +65,16 @@
                 color: #fff;
             }
 
-
-        }
-        .user-more-box {
+            .user-more-box {
                 background: #fff;
                 width: 140px;
-                height: 90px;
+                //height: 90px;
                 position: absolute;
                 box-shadow: 0 3px 4px #ccc;
                 border-radius: 5px;
                 top: 65px;
-                //left: 50%;
-                //margin-left: -70px;
-                right: 60px;
+                left: 50%;
+                margin-left: -70px;
                 font-size: 14px;
                 z-index: 2;
                 display: none;
@@ -102,5 +98,8 @@
                     line-height: 44px;
                 }
             }
+
+        }
+
     }
 }

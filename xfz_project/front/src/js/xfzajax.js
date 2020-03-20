@@ -38,13 +38,13 @@ var xfzajax = {
             }else{
                 var messageObject = result['message'];
                 if(typeof messageObject == 'string' || messageObject.constructor == String){
-                    // window.messageBox.showError(messageObject);
+                    window.messageBox.showError(messageObject);
                 }else{
                     // {"password":['密码最大长度不能超过20为！','xxx'],"telephone":['xx','x']}
                     for(var key in messageObject){
                         var messages = messageObject[key];
                         var message = messages[0];
-                        // window.messageBox.showError(message);
+                        window.messageBox.showError(message);
                     }
                 }
                 if(success){

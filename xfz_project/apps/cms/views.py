@@ -8,6 +8,7 @@ from utils import restful
 from .forms import EditNewsCategory
 import os
 from django.conf import settings
+import qiniu
 
 
 def login_view(request):
@@ -78,3 +79,16 @@ def upload_file(request):
             fp.write(chunk)
     url = request.build_absolute_uri(settings.MEDIA_URL + name)
     return restful.result(data={'url': url})
+
+
+@require_GET
+def qntoken(request):
+    access_key = 'XfppOEavIJgP8xTCDttLhQDbGoGlsUA7L6LzNMKv'
+    secret_key = '3CauEK3LPIoJcATC2URnLSmg6yOMJjiqDPSyPlDX'
+
+    bucket = 'hyvideopx'
+    q = qiniu.Auth(access_key, secret_key)
+    token = q.upload_token(bucket)
+
+    return restful.result(data={'token': token})
+

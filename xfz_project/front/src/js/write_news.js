@@ -5,7 +5,8 @@ function News() {
 
 News.prototype.run = function () {
     var self = this;
-    self.listenUploadFileEvent();
+    // self.listenUploadFileEvent();
+    self.listenQiniuUploadFileEvent();
 
 };
 
@@ -33,7 +34,75 @@ News.prototype.listenUploadFileEvent = function () {
     });
 };
 
+News.prototype.listenQiniuUploadFileEvent = function(){
+    var self = this;
+    var uploadBtn = $("#thumbnail-btn");
+    uploadBtn.change(function () {
+        var file  = this.files[0];
+        xfzajax.get({
+            'url': '/cms/qntoken/',
+            'success': function (result) {
+                if(result['code'] === 200){
+                    var token = result['data']['token']
+                    var key = (new Date()).getTime() + '.' + file.name.split('.')[1];
+                    var putExtra = {
+                        fname: key,
+                        params:{},
+                        mimeType:['image/png', 'image/jpeg', 'image/fig']
+                    };
+                    var config = {
+                        useCdnDomain: true,
+                        retryCount: 6,
+                        region: qiniu.region.z0,
+
+                    };
+
+                    var observable = qiniu.upload(file, key, token, putExtra, config);
+                    observable.subscribe({
+                        'next': self.handleFileUploadProgress,
+                        'error': self.handleFileUploadError,
+                        'complete': self.handleFileUploadComplete
+                    });
+                }
+
+            }
+        })
+    });
+};
+
+News.prototype.handleFileUploadProgress = function(response){
+    var progressGroup = News.progressGroup;
+    var progressBar = $(".progress-bar");
+    progressBar.css({'width':'0'});
+    progressBar.text('0%');
+    var total = response.total;
+    var percent = total.percent;
+    var percentText = percent.toFixed(0)+'%';
+
+    progressGroup.show();
+
+    progressBar.css({'width':percentText});
+    progressBar.text(percentText);
+};
+
+News.prototype.handleFileUploadError = function(error){
+    console.log(error.message);
+    var progressGroup = $("#progress-group");
+    progressGroup.hide();
+};
+
+News.prototype.handleFileUploadComplete = function(response){
+    var progressGroup = $("#progress-group");
+    progressGroup.hide();
+    var domain = 'http://q7jhogfwy.bkt.clouddn.com/';
+    var filename = response.key;
+    var url = domain + filename;
+    var thumbnailInput = $("input[name='thumbnail']");
+    thumbnailInput.val(url);
+};
+
 $(function () {
    var news = new News();
    news.run();
+   News.progressGroup = $("#progress-group");
 });

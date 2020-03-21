@@ -5,10 +5,11 @@ from django.views.generic import View
 from django.views.decorators.http import require_POST, require_GET
 from apps.news.models import NewCategory
 from utils import restful
-from .forms import EditNewsCategory
+from .forms import EditNewsCategory, WriteNewsForm
 import os
 from django.conf import settings
 import qiniu
+from apps.news.models import News
 
 
 def login_view(request):
@@ -25,6 +26,23 @@ class WriteNewView(View):
         categories = NewCategory.objects.all()
         context = {'categories': categories}
         return render(request, 'cms/write_news.html', context=context)
+
+    def post(self, request):
+        form = WriteNewsForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data.get('title')
+            desc = form.cleaned_data.get('desc')
+            thumbnail = form.cleaned_data.get('thumbnail')
+            content = form.cleaned_data.get('content')
+            category_id = form.cleaned_data.get('category')
+            category = NewCategory.objects.get(pk=category_id)
+            News.objects.create(title=title, desc=desc, thumbnail=thumbnail, content=content,
+                                category=category, author=request.user)
+            title = form.cleaned_data.get('title')
+            return restful.ok()
+        else:
+            return restful.params_error(message=form.get_errors())
+
 
 
 @require_GET
@@ -83,10 +101,10 @@ def upload_file(request):
 
 @require_GET
 def qntoken(request):
-    access_key = 'XfppOEavIJgP8xTCDttLhQDbGoGlsUA7L6LzNMKv'
-    secret_key = '3CauEK3LPIoJcATC2URnLSmg6yOMJjiqDPSyPlDX'
+    access_key = settings.QINIU_ACCESS_KEY
+    secret_key = settings.QINIU_SECRET_KEY
 
-    bucket = 'hyvideopx'
+    bucket = settings.QINIU_BUCKET_NAME
     q = qiniu.Auth(access_key, secret_key)
     token = q.upload_token(bucket)
 

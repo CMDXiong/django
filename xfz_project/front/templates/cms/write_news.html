@@ -5,6 +5,8 @@
 {% block head %}
     <script src="{% static 'js/write_news.min.js' %}"></script>
     <script src="https://unpkg.com/qiniu-js@2.4.0/dist/qiniu.min.js"></script>
+    <script src="{% static 'ueditor/ueditor.config.js' %}"></script>
+    <script src="{% static 'ueditor/ueditor.all.min.js' %}"></script>
 {% endblock %}
 
 {% block content-header %}
@@ -64,14 +66,15 @@
 
                         <div class="form-group">
                             <label for="content-form">内容</label>
-                            <textarea name="" id="" cols="30" rows="10" class="form-control"
-                                      id="content-form"></textarea>
+{#                            <textarea name="" id="" cols="30" rows="10" class="form-control"#}
+{#                                      id="content-form"></textarea>#}
+                            <script id="editor" type="text/plain"></script>
                         </div>
 
                     </div>
 
                     <div class="box-footer">
-                        <button class="btn btn-primary pull-right">发布新闻</button>
+                        <button class="btn btn-primary pull-right" id="submit-btn">发布新闻</button>
                     </div>
                 </form>
             </div>

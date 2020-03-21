@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.xfzauth',
     'apps.course',
     'apps.payinfo',
+    'apps.ueditor'
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,25 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Qiniu配置
+QINIU_ACCESS_KEY = 'XfppOEavIJgP8xTCDttLhQDbGoGlsUA7L6LzNMKv'
+QINIU_SECRET_KEY = '3CauEK3LPIoJcATC2URnLSmg6yOMJjiqDPSyPlDX'
+QINIU_BUCKET_NAME = 'hyvideopx'
+QINIU_DOMAIN = 'http://q7jhogfwy.bkt.clouddn.com/'
+
+# 七牛和自己的服务器，最少要配置一个
+# UEditor配置
+UEDITOR_UPLOAD_TO_QINIU = True
+UEDITOR_QINIU_ACCESS_KEY = QINIU_ACCESS_KEY
+UEDITOR_QINIU_SECRET_KEY = QINIU_SECRET_KEY
+UEDITOR_QINIU_BUCKET_NAME = QINIU_BUCKET_NAME
+UEDITOR_QINIU_DOMAIN = QINIU_DOMAIN
+
+# 上传到自己的服务器
+UEDITOR_UPLOAD_TO_SERVER = True
+UEDITOR_UPLOAD_PATH = MEDIA_ROOT
+UEDITOR_CONFIG_PATH = os.path.join(BASE_DIR, 'front', 'dist', 'ueditor', 'config.json')
+
+
+

@@ -145,6 +145,8 @@ Banner.prototype.run = function () {
 function Index(){
     var self = this;
     self.page = 2;
+    self.category_id = 0;
+    self.loadBtn = $("#load-more");
     template.defaults.imports.timeSince = function (dataValue) {
         var date = new Date(dataValue);
         var datats = date.getTime();
@@ -183,6 +185,7 @@ Index.prototype.listenLoadMoreEvent = function(){
             'url': '/news/list/',
             'data': {
                 'p': page,
+                'category_id': self.category_id
             },
             'success': function (result) {
                 if(result['code'] === 200){
@@ -201,10 +204,41 @@ Index.prototype.listenLoadMoreEvent = function(){
         });
     });
 };
+Index.prototype.listenCategorySwitchEvent = function(){
+    var self = this;
+    var tabGroup = $('.list-tab');
+    tabGroup.children().click(function () {
+        // this :代表当前选中的这个li标签
+        var li = $(this);
+        var category_id = li.attr('data-category');
+        var page = 1;
+        xfzajax.get({
+            'url': '/news/list/',
+            'data': {
+                'category_id': category_id,
+                'p': page
+            },
+            'success': function (result) {
+                if(result['code'] === 200){
+                    var newses = result['data'];
+                    var tpl = template("news-item", {"newses": newses});
+                    var newsListGroup = $(".list-inner-group");
+                    newsListGroup.empty();
+                    newsListGroup.append(tpl);
+                    self.page = 2;
+                    self.category_id = category_id;
+                    li.addClass('active').siblings().removeClass('active');
+                    self.loadBtn.show();
+                }
+            },
+        });
+    });
+};
 
 Index.prototype.run = function(){
     var self = this;
     self.listenLoadMoreEvent();
+    self.listenCategorySwitchEvent();
 
 };
 

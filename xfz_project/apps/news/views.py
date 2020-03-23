@@ -4,6 +4,7 @@ from .models import News, NewCategory
 from django.conf import settings
 from utils import restful
 from .serializers import NewsSerializer
+from django.http import Http404
 
 
 def index(request):
@@ -20,9 +21,16 @@ def index(request):
 def news_list(request):
     # 通过参数p，来指定要获取第几页的数据
     page = int(request.GET.get('p', 1))
+
+    # 分类为0，代表不进行任何分类，直接按照时间倒序排序
+    category_id = int(request.GET.get('category_id', 0))
     start = (page - 1) * settings.ONE_PAGE_NEWS_COUNT
     end = start + settings.ONE_PAGE_NEWS_COUNT
-    newses = News.objects.order_by('-pub_time')[start: end]
+    if category_id == 0:
+        newses = News.objects.all()[start: end]
+    else:
+        newses = News.objects.filter(category__id=category_id)[start: end]
+
     serializer = NewsSerializer(newses, many=True)
     data = serializer.data
 
@@ -30,7 +38,14 @@ def news_list(request):
 
 
 def news_detail(request, news_id):
-    return render(request, 'news/news_detail.html')
+    try:
+        news = News.objects.get(pk=news_id)
+        context = {
+            "news": news
+        }
+        return render(request, 'news/news_detail.html', context=context)
+    except:
+        raise Http404
 
 
 def search(request):

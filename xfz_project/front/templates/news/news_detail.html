@@ -1,5 +1,6 @@
 
 {% extends 'base/front_base.html' %}
+{% load news_filters %}
 
 {% block title %}
     新闻详情页面
@@ -14,12 +15,13 @@
         <div class="wrapper">
             <div class="main-content-wrapper">
                 <div class="news-wrapper">
-                    <h1 class="title">新闻详情页标题</h1>
+{#                    <h1 class="title">新闻详情页标题</h1>#}
+                    <h1 class="title">{{ news.title }}</h1>
                     <div class="news-info">
                         <div class="info-group">
-                            <span class="author">福禄娃</span>
-                            <span class="pub-time">06月03日</span>
-                            <span class="category">热点</span>
+                            <span class="author">{{ news.author.username }}</span>
+                            <span class="pub-time">{{ news.pub_time|time_since }}</span>
+                            <span class="category">{{ news.category.name }}</span>
                         </div>
                         <div class="share-group">
                             <span>分享至：</span>
@@ -28,8 +30,7 @@
                         </div>
                     </div>
                     <div class="article">
-                        习近平，男，汉族，1953年6月生，陕西富平人，1969年1月参加工作，1974年1月加入中国共产党，清华大学人文社会学院马克思主义理论与思想政治教育专业毕业，在职研究生学历，法学博士学位。
-现任中国共产党中央委员会总书记，中共中央军事委员会主席，中华人民共和国主席，中华人民共和国中央军事委员会主席。
+                        {{ news.content|safe }}
                     </div>
 
 

@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import News, NewCategory
+from .models import News, NewCategory, Comment
 from django.conf import settings
 from utils import restful
-from .serializers import NewsSerializer
+from .serializers import NewsSerializer, CommentSerizlizer
 from django.http import Http404
+from .forms import PublicCommentForm
+
 
 
 def index(request):
@@ -46,8 +48,21 @@ def news_detail(request, news_id):
             "news": news
         }
         return render(request, 'news/news_detail.html', context=context)
-    except:
+    except news.DoesNotExist:
         raise Http404
+
+
+def public_comment(request):
+    form = PublicCommentForm(request.POST)
+    if form.is_valid():
+        news_id = form.cleaned_data.get('news_id')
+        content = form.cleaned_data.get('content')
+        news = News.objects.get(pk=news_id)
+        comment = Comment.objects.create(content=content,news=news,author=request.user)
+        serializer = CommentSerizlizer(comment)
+        return restful.result(data=serializer.data)
+    else:
+        return restful.params_error(message=form.get_errors())
 
 
 def search(request):

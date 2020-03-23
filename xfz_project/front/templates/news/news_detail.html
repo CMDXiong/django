@@ -7,7 +7,23 @@
 {% endblock %}
 
 {% block head %}
-        <link rel="stylesheet" href="{% static 'css/news/news_detail.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/news/news_detail.min.css' %}">
+    <script src="{% static 'arttemplate/template-web.js' %}"></script>
+    <script src="{% static 'js/news_detail.min.js' %}"></script>
+    {% verbatim %}
+    <script id="comment-item" type="text/html">
+        <li>
+            <div class="comment-info">
+                <img src="" alt="" class="avatar">
+                <span class="author">{{ comment.author.username }}</span>
+                <span class="pub-time">{{ comment.pub_time|timeSince }}</span>
+            </div>
+            <div>
+                <p class="comment-content">comment.content</p>
+            </div>
+        </li>
+    </script>
+    {% endverbatim %}
 {% endblock %}
 
 {% block main %}
@@ -41,30 +57,22 @@
                     <h3 class="title">文章评论(0)</h3>
                     <textarea name="comment" id="" class="comment-textarea logined-textarea" placeholder="立即登录，参与评论~" ></textarea>
                     <div class="submit-btn-group">
-                        <button class="submit-btn">立即评论</button>
+                        <button class="submit-btn" data-news-id="{{ news.id }}">立即评论</button>
                     </div>
 
                     <ul class="comment-list">
-                        <li>
+                        {% for comment in news.comments.all %}
+                            <li>
                             <div class="comment-info">
                                 <img src="" alt="" class="avatar">
-                                <span class="author">小知了</span>
-                                <span class="pub-time">1小时前</span>
+                                <span class="author">{{ comment.author.username }}</span>
+                                <span class="pub-time">{{ comment.pub_time|time_since }}</span>
                             </div>
                             <div>
-                                <p class="comment-content">这是第一条评论</p>
+                                <p class="comment-content">{{ comment.content }}</p>
                             </div>
                         </li>
-                        <li>
-                            <div class="comment-info">
-                                <img src="" alt="" class="avatar">
-                                <span class="author">小知了</span>
-                                <span class="pub-time">1小时前</span>
-                            </div>
-                            <div>
-                                <p class="comment-content">这是第一条评论</p>
-                            </div>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>

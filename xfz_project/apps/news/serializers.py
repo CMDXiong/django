@@ -3,7 +3,7 @@ __author__ = 'px'
 
 
 from rest_framework import serializers
-from .models import NewCategory, News
+from .models import NewCategory, News, Comment
 from apps.xfzauth.serializers import UserSerializer
 
 
@@ -22,4 +22,10 @@ class NewsSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'desc', 'thumbnail', 'pub_time', 'category', 'author')
 
 
+class CommentSerizlizer(serializers.ModelSerializer):
+    author = UserSerializer()
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'content', 'author', 'pub_time')
 

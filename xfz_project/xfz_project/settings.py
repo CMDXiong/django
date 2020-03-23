@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'apps.xfzauth',
     'apps.course',
     'apps.payinfo',
-    'apps.ueditor'
+    'apps.ueditor',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -163,4 +164,5 @@ UEDITOR_UPLOAD_PATH = MEDIA_ROOT
 UEDITOR_CONFIG_PATH = os.path.join(BASE_DIR, 'front', 'dist', 'ueditor', 'config.json')
 
 
-
+# 一次加载多少篇文章
+ONE_PAGE_NEWS_COUNT = 2

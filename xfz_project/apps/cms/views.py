@@ -5,11 +5,12 @@ from django.views.generic import View
 from django.views.decorators.http import require_POST, require_GET
 from apps.news.models import NewCategory
 from utils import restful
-from .forms import EditNewsCategory, WriteNewsForm
+from .forms import EditNewsCategory, WriteNewsForm, AddBannerForm
 import os
 from django.conf import settings
 import qiniu
-from apps.news.models import News
+from apps.news.models import News, Banner
+from apps.news.serializers import BannerSerizlizer
 
 
 def login_view(request):
@@ -86,6 +87,34 @@ def delete_news_category(request):
         return restful.ok()
     except:
         return restful.params_error(message="该分类不存在")
+
+
+def banners(request):
+    return render(request, 'cms/banners.html')
+
+
+def banner_list(request):
+    banners = Banner.objects.all()
+    serialize = BannerSerizlizer(banners, many=True)
+    return restful.result(data=serialize.data)
+
+
+def add_banner(request):
+    form = AddBannerForm(request.POST)
+    if form.is_valid():
+        priority = form.cleaned_data.get('priority')
+        image_url = form.cleaned_data.get('image_url')
+        link_to = form.cleaned_data.get('link_to')
+        banner = Banner.objects.create(priority=priority, image_url=image_url, link_to=link_to)
+        return restful.result(data={'banner_id': banner.pk})
+    else:
+        return restful.params_error(message=form.get_errors())
+
+
+def delete_banner(request):
+    banner_id = request.POST.get('banner_id')
+    Banner.objects.filter(pk=banner_id).delete()
+    return restful.ok()
 
 
 @require_POST

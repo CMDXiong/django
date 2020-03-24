@@ -6,7 +6,7 @@ from utils import restful
 from .serializers import NewsSerializer, CommentSerizlizer
 from django.http import Http404
 from .forms import PublicCommentForm
-
+from apps.xfzauth.decorators import xfz_login_required
 
 
 def index(request):
@@ -43,7 +43,7 @@ def news_list(request):
 
 def news_detail(request, news_id):
     try:
-        news = News.objects.select_related('category', 'author').get(pk=news_id)
+        news = News.objects.select_related('category', 'author').prefetch_related('comments__author').get(pk=news_id)
         context = {
             "news": news
         }
@@ -52,13 +52,14 @@ def news_detail(request, news_id):
         raise Http404
 
 
+@xfz_login_required
 def public_comment(request):
     form = PublicCommentForm(request.POST)
     if form.is_valid():
         news_id = form.cleaned_data.get('news_id')
         content = form.cleaned_data.get('content')
         news = News.objects.get(pk=news_id)
-        comment = Comment.objects.create(content=content,news=news,author=request.user)
+        comment = Comment.objects.create(content=content, news=news, author=request.user)
         serializer = CommentSerizlizer(comment)
         return restful.result(data=serializer.data)
     else:

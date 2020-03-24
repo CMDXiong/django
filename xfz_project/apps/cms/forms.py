@@ -2,7 +2,7 @@
 __author__ = 'px'
 
 from django import forms
-from apps.news.models import News
+from apps.news.models import News, Banner
 from apps.forms import FormMixin
 
 
@@ -17,4 +17,10 @@ class WriteNewsForm(forms.ModelForm, FormMixin):
     class Meta:
         model = News
         exclude = ['category', 'author', 'pub_time']
+
+
+class AddBannerForm(forms.ModelForm, FormMixin):
+    class Meta:
+        model = Banner
+        fields = ('priority', 'link_to', 'image_url')
 

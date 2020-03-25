@@ -40,6 +40,12 @@ Banners.prototype.listenAddBannerEvent = function () {
     var self = this;
     var addBtn = $("#add-banner-btn");
     addBtn.click(function () {
+        var bannerListGroup = $(".banner-list-group");
+        var length = bannerListGroup.children().length;
+        if(length >= 6){
+            window.messageBox.showInfo('最多只能添加6张轮播图');
+            return;
+        }
         self.createBannerItem();
     });
 };
@@ -75,9 +81,9 @@ Banners.prototype.addImageSelectEvent = function(bannerItem){
 
 Banners.prototype.addRemoveBannerEvent = function(bannerItem){
     var closeBtn = bannerItem.find(".close-btn");
-    var bannerId = bannerItem.attr('data-banner-id');
 
     closeBtn.click(function () {
+        var bannerId = bannerItem.attr('data-banner-id');
         if(bannerId){
             xfzalert.alertConfirm({
                 'text': '您确定要删除这个轮播图吗？',
@@ -109,22 +115,35 @@ Banners.prototype.addSaveBannerEvent = function(bannerItem){
     var priorityTag = bannerItem.find("input[name='priority']");
     var linktoTag = bannerItem.find("input[name='link_to']");
     var prioritySpan = bannerItem.find('span[class="priority"]');
+    var bannerId = bannerItem.attr('data-banner-id');
+    var url = ''
+    if (bannerId){
+        url = '/cms/edit_banner/';
+    }else{
+        url = '/cms/add_banner/';
+    }
     saveBtn.click(function () {
         var image_url = imageTag.attr('src');
         var priority = priorityTag.val();
         var link_to = linktoTag.val();
         xfzajax.post({
-           'url': '/cms/add_banner/',
+           'url': url,
             'data': {
                 'image_url': image_url,
                 'priority': priority,
-                'link_to': link_to
+                'link_to': link_to,
+                'pk': bannerId
             },
             'success': function (result) {
                 if(result['code'] === 200){
-                    var bannerId = result['data']['banner_id']
-                    prioritySpan.text("优先级："+bannerId);
-                    window.messageBox.showSuccess("轮播图添加完成");
+                    if(bannerId){
+                        window.messageBox.showSuccess("轮播图修改成功")
+                    }else{
+                        bannerId = result['data']['banner_id'];
+                        bannerItem.attr('data-banner-id', bannerId);
+                        window.messageBox.showSuccess("轮播图添加完成");
+                    }
+                    prioritySpan.text("优先级："+priority);
                 }
             }
         });

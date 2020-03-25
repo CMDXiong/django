@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import News, NewCategory, Comment
+from .models import News, NewCategory, Comment,Banner
 from django.conf import settings
 from utils import restful
 from .serializers import NewsSerializer, CommentSerizlizer
 from django.http import Http404
 from .forms import PublicCommentForm
 from apps.xfzauth.decorators import xfz_login_required
+from django.views.generic import View
 
 
 def index(request):
@@ -17,7 +18,8 @@ def index(request):
     cateories = NewCategory.objects.all()
     context = {
         'newses': newses,
-        'categories': cateories
+        'categories': cateories,
+        'banners': Banner.objects.all()
     }
     return render(request, 'news/index.html', context=context)
 
@@ -45,7 +47,7 @@ def news_detail(request, news_id):
     try:
         news = News.objects.select_related('category', 'author').prefetch_related('comments__author').get(pk=news_id)
         context = {
-            "news": news
+            "news": news,
         }
         return render(request, 'news/news_detail.html', context=context)
     except news.DoesNotExist:

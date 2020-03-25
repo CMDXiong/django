@@ -26,16 +26,18 @@
         <div class="wrapper">
             <div class="course-wrapper">
                 <div class="course-info">
-                    <p class="course-title">对赌是什么 该不该做对赌</p>
+                    <p class="course-title">{{ course.title }}</p>
                     <div class="price-group">
                         <div class="share-group">
                             <span class="title">分享至：</span>
                         </div>
                         <div class="buy-group">
-                            <span class="price pay">￥49.0</span>
-                            <a href="#" class="buy-btn">立即购买</a>
-                            <span class="price free">免费</span>
-
+                            {% if course.price > 0 %}
+                                <span class="price pay">￥{{ course.price }}</span>
+                                <a href="#" class="buy-btn">立即购买</a>
+                            {% else %}
+                                <span class="price free">免费</span>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -51,21 +53,21 @@
                         </p>
                         <div class="teacher-group">
                             <div class="avatar-group">
-                                <img src="" alt="">
+                                <img src="{{ course.teacher.avatar }}" alt="">
                             </div>
                             <div class="teacher-info">
-                                <p class="teacher-name">px</p>
-                                <p class="teacher-desc">netease</p>
+                                <p class="teacher-name">{{ course.teacher.username }}</p>
+                                <p class="teacher-desc">{{ course.teacher.jobtitle }}</p>
                             </div>
                         </div>
                         <p class="item-content">
-                            潘雄xxxxxxxxxxxxxxxxxxxxxx*******************
+                            {{ course.teacher.profile|safe }}
                         </p>
 
                     </div>
                     <div class="item-group">
                         <p class="item-title">
-                            课堂简介
+                            {{ course.profile }}
                         </p>
                         <p class="item-content">
                             潘雄xxxxxxxxxxxxxxxxxxxxxx*******************
